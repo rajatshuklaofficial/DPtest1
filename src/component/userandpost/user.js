@@ -19,6 +19,22 @@ const DesktopStyles ={
 			marginBottom:'10px',
 			borderRadius:'4px',
 			padding:'5px',
+		},
+		subDivSearch:{
+			height:'auto',
+			width: '100%',
+			backgroundColor:'#ffffff',
+			marginBottom:'10px',
+			borderRadius:'4px',
+			padding:'5px',
+		},
+		searchSuggestions:{
+			height:'auto',
+			width: '100%',
+			backgroundColor:'#ffffff',
+			marginBottom:'10px',
+			borderRadius:'4px',
+			padding:'5px',
 		}
 	}
 
@@ -27,6 +43,7 @@ class user extends Component{
 		super();
 		this.state={
 			users:[],
+			filteredUser:[],
 			errors:{},
 			redirectlink:null,
 		}
@@ -36,13 +53,21 @@ class user extends Component{
 		axios.get('https://jsonplaceholder.typicode.com/users')
 		.then((res)=>{console.log(res.data)
 				this.setState({users:res.data})
+				this.setState({filteredUser:res.data})
 			})
 		.catch(err=>console.log(err));
 		
 	}
 	onChange(e){
-		this.setState({[e.target.name]:e.target.value});
+		console.log(e.target.value)
+		const filteredUser =  this.state.users.filter(user =>{
+			// console.log(user.name.toLowerCase().indexOf(e.target.value.toLowerCase()))
+			return user.name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
+		})
+		console.log(filteredUser)
+		this.setState({filteredUser:filteredUser})
 	}
+
 	redirectToPost=(e)=>{
 		this.setState({redirectlink:'post'+'/'+'&'+ e.id+'&'+e.username})
 	}
@@ -57,8 +82,9 @@ class user extends Component{
 			        <div className="col-md-8 m-auto">
 			          <h1 className="display-4 text-center">All users</h1>
 			          <p className="lead text-center">Click on any user to see Posts by user</p>
+			          <input placeholder="Search.."  icon ="Search" style= {DesktopStyles.subDivSearch} onChange={this.onChange}/>
 			          {
-				          this.state.users.map((user,index)=>(
+				          this.state.filteredUser.map((user,index)=>(
 				          	<div key={index} style={DesktopStyles.mainDiv} onClick={()=>{this.redirectToPost(user)}}>
 					          	<div style = {DesktopStyles.subDiv}>
 					          		Id: {user.id} || Name: {user.name} || Usename: {user.username} || Phone: {user.phone}

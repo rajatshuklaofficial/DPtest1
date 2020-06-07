@@ -31,7 +31,6 @@ class post extends Component{
 			redirectlink:null,
 			username:''
 		}
-		this.onChange=this.onChange.bind(this);
 	}
 	componentDidMount(){
 		console.log(this.state.posts)
@@ -44,9 +43,6 @@ class post extends Component{
 				this.setState({posts:res.data})
 			})
 		.catch(err=>console.log(err));
-	}
-	onChange(e){
-		this.setState({[e.target.name]:e.target.value});
 	}
 	redirectToPost=(e)=>{
 		this.setState({redirectlink:'user'+'/'+ e})
